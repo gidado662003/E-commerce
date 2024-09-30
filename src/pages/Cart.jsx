@@ -1,47 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router";
+
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
-
   const navigate = useNavigate();
+
+  // Fetch cart data from localStorage on component mount
   useEffect(() => {
-    const PrevData = localStorage.getItem("cart");
-    if (PrevData) {
-      setCartItems(JSON.parse(PrevData));
+    const prevData = localStorage.getItem("cart");
+    if (prevData) {
+      setCartItems(JSON.parse(prevData));
     }
   }, []);
 
+  // Calculate total whenever cartItems change
   useEffect(() => {
-    setTotal(
-      cartItems
+    if (cartItems.length > 0) {
+      const calculatedTotal = cartItems
         .map((data) => data.price * data.quantity * 1500)
-        .reduce((a, b) => a + b, 0)
-    );
+        .reduce((a, b) => a + b, 0);
+      setTotal(calculatedTotal);
+    } else {
+      setTotal(0);
+    }
   }, [cartItems]);
 
+  // Handle quantity change for each item
   function handleQuantity(id, event) {
-    const value = event.target.value;
+    const value = parseInt(event.target.value) || 1; // Ensure a number
     setCartItems((prev) => {
       const updatedItems = prev.map((item) =>
-        item.id === id ? { ...item, quantity: parseInt(value) } : item
+        item.id === id ? { ...item, quantity: value } : item
       );
       localStorage.setItem("cart", JSON.stringify(updatedItems));
       return updatedItems;
     });
   }
 
+  // Remove item from cart
   function removeItem(id) {
-    const updateCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updateCart);
-    localStorage.setItem("cart", JSON.stringify(updateCart));
+    const updatedCart = cartItems.filter((item) => item.id !== id);
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   }
 
   return (
     <div className="max-w-5xl mx-auto p-6">
       <span className="flex items-center gap-3">
-        <h1 className="text-3xl font-bold ">Shopping Cart</h1>
+        <h1 className="text-3xl font-bold">Shopping Cart</h1>
         <p className="w-8 md:w-11 h-[3px] bg-[#414141]"></p>
       </span>
       <div className="bg-white shadow-md rounded-lg p-6">
@@ -81,7 +89,7 @@ function Cart() {
                   min={1}
                   max={item.stock}
                   className="w-16 text-center border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  defaultValue={item.quantity}
+                  value={item.quantity}
                   name={item.id}
                   onChange={(event) => handleQuantity(item.id, event)}
                 />
@@ -94,21 +102,33 @@ function Cart() {
           ))
         )}
       </div>
-      <div className="mt-8 sm:float-right w-full sm:w-[500px]">
-        <p className="text-2xl font-bold text-gray-700">Cart Total:</p>
-        <div className="flex justify-between border-b-2 p-3">
-          <p>Subtotal</p>
-          <p>₦{total.toLocaleString()}</p>
+
+      {/* Total summary */}
+      {cartItems.length > 0 && (
+        <div className="mt-8 sm:float-right w-full sm:w-[500px]">
+          <p className="text-2xl font-bold text-gray-700">Cart Total:</p>
+          <div className="flex justify-between border-b-2 p-3">
+            <p>Subtotal</p>
+            <p>₦{total.toLocaleString()}</p>
+          </div>
+          <div className="flex justify-between border-b-2 p-3">
+            <p>Shipping fee</p>
+            <p>₦10,000</p>
+          </div>
+          <div className="flex justify-between border-b-2 p-3">
+            <p className="font-bold text-2xl text-gray-700">Total:</p>
+            <p>₦{(total + 10000).toLocaleString()}</p>
+          </div>
+          <div className="flex justify-end mt-3">
+            <button
+              className="bg-black text-white px-5 py-2 rounded-md"
+              onClick={() => navigate("/place-order")}
+            >
+              Proceed to check out
+            </button>
+          </div>
         </div>
-        <div className="flex justify-between border-b-2 p-3">
-          <p>Shipping fee</p>
-          <p>₦10,000</p>
-        </div>
-        <div className="flex justify-between border-b-2 p-3">
-          <p className="font-bold text-2xl text-gray-700">Total:</p>
-          <p>₦{total === 0 ? 0 : (total + 10000).toLocaleString()}</p>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

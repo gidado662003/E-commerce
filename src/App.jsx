@@ -9,6 +9,9 @@ import Home from "./pages/Home";
 import Collection from "./pages/Collection";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
+import PlaceOrder from "./pages/PlaceOrder";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import "./App.css";
 import { useEffect, useState } from "react";
 
@@ -44,6 +47,9 @@ function App() {
               }
             />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/place-order" element={<PlaceOrder />} />
           </Route>
           <Route path="*" element={<>Page Not Found</>} />
         </Routes>

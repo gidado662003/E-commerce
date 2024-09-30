@@ -61,7 +61,6 @@ function Product({ cartLength, setCartLength }) {
       .then((response) => response.json())
       .then((data) => setCategoryProducts(data.products));
   }, [categoryUrl]);
-  console.log(categoryProducts);
   if (!data) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -230,7 +229,7 @@ function Product({ cartLength, setCartLength }) {
                     {product.title}
                   </p>
                   <p className="text-green-600 font-bold text-xl">
-                    ₦{(product.price * 1500).toLocaleString("default")}{" "}
+                    ₦{(product.price * 1500).toLocaleString()}{" "}
                   </p>
                 </div>
               ))
