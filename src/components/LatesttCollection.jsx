@@ -139,7 +139,7 @@ function LatesttCollection() {
             />
           )}
         </div>
-        <div className="grid grid-cols-3 gap-20">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-20">
           {filterdata.slice(0, 3).map((items) => (
             <div key={items.id} className="text-center shadow-md py-3">
               <img
