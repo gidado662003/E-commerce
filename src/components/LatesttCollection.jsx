@@ -154,7 +154,7 @@ function LatesttCollection() {
         </div>
 
         {/* Subscribe Section */}
-        <div className="flex justify-center mt-[300px] text-center">
+        <div className="flex justify-center my-[300px] text-center">
           <div>
             <h1 className="mb-2 text-[25px]">Subscribe now & get 20% off</h1>
             <div className="flex">
@@ -162,7 +162,7 @@ function LatesttCollection() {
                 type="email"
                 placeholder="Enter your email id"
                 value={input}
-                className="py-3 indent-3 border-2 min-w-[420px] focus:border-red-700"
+                className="py-3 indent-3 border-2 w-[300px] sm:min-w-[420px] focus:border-red-700"
                 onChange={(e) => setInput(e.target.value)}
               />
               <button
